@@ -17,7 +17,7 @@ module Xcode
         attr_reader :allowed_types, :platforms, :options, :targets
         attr_reader :project
 
-        def initialize
+        def initialize(**options)
             super
             @ancestors = []
             @definitions = {}
