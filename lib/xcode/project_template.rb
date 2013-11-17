@@ -14,7 +14,7 @@ module Xcode
         #   @return [Array] Nodes
         attr_reader :nodes
 
-        attr_reader :allowed_types, :platforms, :options, :targets
+        attr_reader :allowed_types, :options, :targets
         attr_reader :project
 
         def initialize(**options)

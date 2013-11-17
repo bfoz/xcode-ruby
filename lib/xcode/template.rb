@@ -23,8 +23,16 @@ module Xcode
 	attr_accessor :description
 
 	# @!attribute kind
-	#   @return [String]	Indicates whether the template is a Project Template (Xcode.Xcode3.ProjectTemplateUnitKind) or a File Template (Xcode.IDEKit.TextSubstitutionFileTemplateKind)
+	#   @return [String]	A {Template} can be either a Project Template (Xcode.Xcode3.ProjectTemplateUnitKind) or a File Template (Xcode.IDEKit.TextSubstitutionFileTemplateKind)
 	attr_accessor :kind
+
+	# @!attribute macOSX
+	#   @return [Boolean]	Is the {Template} valid for Mac OS X?
+	attr_accessor :macOSX
+
+	# @!attribute iOS
+	#   @return [Boolean]	Is the {Template} valid for iOS?
+	attr_accessor :iOS
 
 	# @!attribute sort_order
 	#   @return [Number]	Not sure what this does. Defaults to 1.
@@ -39,8 +47,28 @@ module Xcode
 	    @sort_order = 1
         end
 
+	# @!attribute platforms
+	#   @return [Array<String>] The platforms that the template supports
+	def platforms
+	    [iOS ? 'com.app.platform.iphoneos' : nil, macOSX ? 'com.app.platform.macosx' : nil].compact
+	end
+
+	def platforms=(*args)
+	    args.flatten!
+	    args.compact!
+	    return if args.length > 2
+	    self.iOS = args.include?('com.app.platform.iphoneos')
+	    self.macOSX = args.include?('com.app.platform.macosx')
+	end
+
 	def to_hash
-	    {'Description' => description, 'Kind' => kind, 'Identifier' => identifier, 'Concrete' => concrete, 'SortOrder' => sort_order}
+	    {'Description' => description,
+	     'Kind' => kind,
+	     'Identifier' => identifier,
+	     'Concrete' => concrete,
+	     'SortOrder' => sort_order,
+	     'Platforms' => platforms,
+	    }
 	end
 
 	# Write the template structure into the given directory path
