@@ -25,7 +25,7 @@ module Xcode
         end
 
 	def to_hash
-	    {'Description' => description, 'Kind' => kind, 'Identifier' => identifier}
+	    {'Description' => description, 'Kind' => kind, 'Identifier' => identifier, 'Concrete' => concrete}
 	end
 
 	# Write the template structure into the given directory path
@@ -53,6 +53,8 @@ module Xcode
 	# @return [REXML::Element]
 	def element_for_value(value)
 	    case value
+		when TrueClass, FalseClass
+		    REXML::Element.new( value ? 'true' : 'false')
 		when Array
 		    REXML::Element.new('array').tap do |element|
 			value.each.compact {|v| element.add_element(element_for_value(v)) }
