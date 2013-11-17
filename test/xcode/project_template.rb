@@ -88,4 +88,12 @@ describe Xcode::ProjectTemplate do
             subject.nodes.first.must_equal 'MyFile.m'
         end
     end
+
+    describe 'when generating a hash' do
+	let(:hash) { subject.to_hash }
+
+	it 'must have a kind' do
+	    hash['Kind'].must_equal Xcode::Template::XCODE3_PROJECT_TEMPLATE_UNIT_KIND
+	end
+    end
 end

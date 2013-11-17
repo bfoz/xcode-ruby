@@ -56,15 +56,19 @@ module Xcode
 		when TrueClass, FalseClass
 		    REXML::Element.new( value ? 'true' : 'false')
 		when Array
-		    REXML::Element.new('array').tap do |element|
-			value.each.compact {|v| element.add_element(element_for_value(v)) }
+		    if value.length != 0
+			REXML::Element.new('array').tap do |element|
+			    value.compact.each {|v| element.add_element(element_for_value(v)) }
+			end
 		    end
 		when Hash
 		    REXML::Element.new('dict').tap do |element|
 			value.each do |key, v|
 			    next unless v
+			    e = element_for_value(v)
+			    next unless e
 			    element.add_element('key').text = key
-			    element.add_element(element_for_value(v))
+			    element.add_element(e)
 			end
 		    end
 		when String

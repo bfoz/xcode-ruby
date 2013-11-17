@@ -25,6 +25,10 @@ module Xcode
 	    @nodes = []
         end
 
+	def to_hash
+	    super.merge({'Ancestors' => ancestors})
+	end
+
         def add_file(path)
 	    definition = {'Path' => path}
 
