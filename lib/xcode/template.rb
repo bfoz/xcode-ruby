@@ -14,7 +14,21 @@ module Xcode
 	#   @return [String]	The name of the template's .xctemplate directory (without the suffix).
 	attr_accessor :name
 
-        attr_accessor :concrete, :description, :kind, :sorter_order
+	# @!attribute concrete
+	#   @return [Boolean]	A concrete template will appear in the New Project Assistant. Non-concrete (ie. abstract) templates can be used as ancestors of other templates.
+        attr_accessor :concrete
+
+	# @!attribute description
+	#   @return [String]	A description of the template. Appears at the bottom of the New Project Template dialog.
+	attr_accessor :description
+
+	# @!attribute kind
+	#   @return [String]	Indicates whether the template is a Project Template (Xcode.Xcode3.ProjectTemplateUnitKind) or a File Template (Xcode.IDEKit.TextSubstitutionFileTemplateKind)
+	attr_accessor :kind
+
+	# @!attribute sort_order
+	#   @return [Number]	Not sure what this does. Defaults to 1.
+	attr_accessor :sort_order
 
 	# Create a new {Template} with the provided name and identifier
 	# @param identifier [String]	The template identifier string
@@ -22,10 +36,11 @@ module Xcode
         def initialize(**options)
             @identifier = options[:identifier] || options[:id]
 	    @name = options[:name]
+	    @sort_order = 1
         end
 
 	def to_hash
-	    {'Description' => description, 'Kind' => kind, 'Identifier' => identifier, 'Concrete' => concrete}
+	    {'Description' => description, 'Kind' => kind, 'Identifier' => identifier, 'Concrete' => concrete, 'SortOrder' => sort_order}
 	end
 
 	# Write the template structure into the given directory path
