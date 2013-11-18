@@ -79,5 +79,19 @@ module Xcode
 		}
 	    end
 	end
+
+	class StaticOption < Option
+	    def initialize(**options)
+		super **options
+		@type = :static
+	    end
+	end
+
+	class TextOption < Option
+	    def initialize(**options)
+		super **options
+		@type = :text
+	    end
+	end
     end
 end
