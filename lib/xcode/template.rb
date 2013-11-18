@@ -1,6 +1,8 @@
 require 'fileutils'
 require 'rexml/document'
 
+require_relative 'template/option'
+
 module Xcode
     class Template
         XCODE3_PROJECT_TEMPLATE_UNIT_KIND = 'Xcode.Xcode3.ProjectTemplateUnitKind'
@@ -105,17 +107,21 @@ module Xcode
 			end
 		    end
 		when Hash
-		    REXML::Element.new('dict').tap do |element|
-			value.each do |key, v|
-			    next unless v
-			    e = element_for_value(v)
-			    next unless e
-			    element.add_element('key').text = key
-			    element.add_element(e)
+		    if value.length != 0
+			REXML::Element.new('dict').tap do |element|
+			    value.each do |key, v|
+				next unless v
+				e = element_for_value(v)
+				next unless e
+				element.add_element('key').text = key
+				element.add_element(e)
+			    end
 			end
 		    end
 		when String
 		    REXML::Element.new('string').tap {|element| element.text = value }
+		else
+		    element_for_value(value.to_hash) if value.respond_to? :to_hash
 	    end
 	end
     end

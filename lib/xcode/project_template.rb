@@ -11,10 +11,14 @@ module Xcode
         attr_reader :definitions
 
         # @!attribute [r] nodes
-        #   @return [Array] Nodes
+        #   @return [Array<String>] Nodes represent files that will be created in the generated project
         attr_reader :nodes
 
-        attr_reader :allowed_types, :options, :targets
+	# @!attribute options
+	#   @return [Array] Options are controls that show up in the New Project Assistant
+	attr_reader :options
+
+        attr_reader :allowed_types, :targets
         attr_reader :project
 
         def initialize(**options)
@@ -23,10 +27,11 @@ module Xcode
             @definitions = {}
             @kind = Template::XCODE3_PROJECT_TEMPLATE_UNIT_KIND
 	    @nodes = []
+	    @options = []
         end
 
 	def to_hash
-	    super.merge({'Ancestors' => ancestors})
+	    super.merge({'Ancestors' => ancestors, 'Options' => options})
 	end
 
         def add_file(path)
@@ -41,5 +46,9 @@ module Xcode
 
 	    nodes.push path
         end
+
+	def add_option(**options)
+	    @options.push Option.new(**options)
+	end
     end
 end
