@@ -17,6 +17,14 @@ describe Xcode::ProjectTemplate do
         subject.nodes.empty?.must_equal true
     end
 
+    it 'must create a new Hash when a new Configuration is set' do
+	subject.configurations['Debug'].must_be_kind_of Hash
+    end
+
+    it 'must have no shared settings' do
+	subject.settings.must_be :empty?
+    end
+
     describe "when adding a resource file" do
         before do
             subject.add_file 'MyFile.m'

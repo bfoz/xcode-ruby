@@ -2,9 +2,17 @@ require_relative 'template'
 
 module Xcode
     class ProjectTemplate < Template
+	# @!attribute [r] allowed_types
+	#   @return [Array<String>] The file types allowed by the {Template}
+	attr_reader :allowed_types
+
         # @!attribute [r] ancestors
         #   @return [Array<String>] Type identifiers of the template's ancestor templates
         attr_reader :ancestors
+
+	# @!attribute [r] configurations
+	#   @return [Hash]  Build configurations
+	attr_reader :configurations
 
         # @!attribute [r] definitions
         #   @return [Hash]  Definitions
@@ -18,20 +26,29 @@ module Xcode
 	#   @return [Array] Options are controls that show up in the New Project Assistant
 	attr_reader :options
 
-        attr_reader :allowed_types, :targets
-        attr_reader :project
+	# @!attribute [r] settings
+	#   @return [Hash]  Settings shared by all of the Project's configurations
+	attr_reader :settings
+
+        attr_reader :targets
 
         def initialize(**options)
             super
+	    @allowed_types = []
             @ancestors = []
+	    @configurations = Hash.new({})
             @definitions = {}
             @kind = Template::XCODE3_PROJECT_TEMPLATE_UNIT_KIND
 	    @nodes = []
 	    @options = []
+	    @settings = {}
         end
 
 	def to_hash
-	    super.merge({'Ancestors' => ancestors, 'Options' => options})
+	    super.merge({'Ancestors' => ancestors,
+			 'Options' => options,
+			 'Project' => {'SharedSettings' => settings, 'Configurations' => configurations},
+			 'AllowedTypes' => allowed_types})
 	end
 
         def add_file(path)
