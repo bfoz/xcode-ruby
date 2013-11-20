@@ -30,6 +30,8 @@ module Xcode
 	#   @return [Hash]  Settings shared by all of the Project's configurations
 	attr_reader :settings
 
+	# @!attribute [r] targets
+	#   @return [Array] Build targets
         attr_reader :targets
 
         def initialize(**options)
@@ -42,13 +44,15 @@ module Xcode
 	    @nodes = []
 	    @options = []
 	    @settings = {}
+	    @targets = []
         end
 
 	def to_hash
 	    super.merge({'Ancestors' => ancestors,
 			 'Options' => options,
 			 'Project' => {'SharedSettings' => settings, 'Configurations' => configurations},
-			 'AllowedTypes' => allowed_types})
+			 'AllowedTypes' => allowed_types,
+			 'Targets'  => targets})
 	end
 
         def add_file(path)
