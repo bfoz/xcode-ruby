@@ -2,10 +2,6 @@ require_relative 'template'
 
 module Xcode
     class ProjectTemplate < Template
-	# @!attribute [r] allowed_types
-	#   @return [Array<String>] Limit the extensions of any filenames entered by the user to the specified list
-	attr_reader :allowed_types
-
         # @!attribute [r] ancestors
         #   @return [Array<String>] Type identifiers of the template's ancestor templates
         attr_reader :ancestors
@@ -36,7 +32,6 @@ module Xcode
 
         def initialize(**options)
             super
-	    @allowed_types = []
             @ancestors = []
 	    @configurations = Hash.new({})
             @definitions = {}
@@ -51,7 +46,6 @@ module Xcode
 	    super.merge({'Ancestors' => ancestors,
 			 'Options' => options,
 			 'Project' => {'SharedSettings' => settings, 'Configurations' => configurations},
-			 'AllowedTypes' => allowed_types,
 			 'Targets'  => targets})
 	end
 
