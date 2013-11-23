@@ -37,7 +37,7 @@ module Xcode
 	attr_accessor :iOS
 
 	# @!attribute sort_order
-	#   @return [Number]	Not sure what this does. Defaults to 1.
+	#   @return [Number]	Change the {Template}'s sort order when displayed in the New Project dialog. Templates are sorted by category, then sort_order (highest to lowest), and then alphabetically. 
 	attr_accessor :sort_order
 
 	# Create a new {Template} with the provided name and identifier

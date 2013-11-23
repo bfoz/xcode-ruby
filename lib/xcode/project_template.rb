@@ -3,7 +3,7 @@ require_relative 'template'
 module Xcode
     class ProjectTemplate < Template
 	# @!attribute [r] allowed_types
-	#   @return [Array<String>] The file types allowed by the {Template}
+	#   @return [Array<String>] Limit the extensions of any filenames entered by the user to the specified list
 	attr_reader :allowed_types
 
         # @!attribute [r] ancestors
