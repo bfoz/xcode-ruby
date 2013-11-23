@@ -1,3 +1,4 @@
+require_relative 'xcode/file_template'
 require_relative 'xcode/project_template'
 require_relative 'xcode/target'
 
