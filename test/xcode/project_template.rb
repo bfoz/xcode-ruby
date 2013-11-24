@@ -33,9 +33,9 @@ describe Xcode::ProjectTemplate do
         it 'must add a definition' do
             definition = subject.definitions['MyFile.m']
             definition.wont_be_nil
-            definition['Group'].must_be_nil
-            definition['Path'].must_equal 'MyFile.m'
-            definition['TargetIndices'].must_be_nil
+            definition.group.must_be_nil
+            definition.path.must_equal 'MyFile.m'
+            definition.target_indices.must_be_nil
         end
 
         it 'must add a node' do
@@ -51,9 +51,9 @@ describe Xcode::ProjectTemplate do
         it 'must add a definition with a group' do
             definition = subject.definitions['MyFiles/MyFile.m']
             definition.wont_be_nil
-            definition['Group'].must_equal 'MyFiles'
-            definition['Path'].must_equal 'MyFiles/MyFile.m'
-            definition['TargetIndices'].must_be_nil
+            definition.group.must_equal 'MyFiles'
+            definition.path.must_equal 'MyFiles/MyFile.m'
+            definition.target_indices.must_be_nil
         end
 
         it 'must add a node' do
@@ -69,9 +69,9 @@ describe Xcode::ProjectTemplate do
         it 'must add a definition with a subgroup' do
             definition = subject.definitions['Classes/MyClass/MyFile.m']
             definition.wont_be_nil
-            definition['Group'].must_equal ['Classes', 'MyClass']
-            definition['Path'].must_equal 'Classes/MyClass/MyFile.m'
-            definition['TargetIndices'].must_be_nil
+            definition.group.must_equal ['Classes', 'MyClass']
+            definition.path.must_equal 'Classes/MyClass/MyFile.m'
+            definition.target_indices.must_be_nil
         end
 
         it 'must add a node' do
@@ -87,9 +87,9 @@ describe Xcode::ProjectTemplate do
         it 'must add a definition' do
             definition = subject.definitions['MyFile.m']
             definition.wont_be_nil
-            definition['Group'].must_be_nil
-            definition['Path'].must_equal 'MyFile.m'
-#            definition['TargetIndices'].must_be :empty?
+            definition.group.must_be_nil
+            definition.path.must_equal 'MyFile.m'
+            definition.target_indices.must_be_nil
         end
 
         it 'must add a node' do

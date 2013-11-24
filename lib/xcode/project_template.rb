@@ -1,4 +1,5 @@
 require_relative 'template'
+require_relative 'template/definition'
 
 module Xcode
     class ProjectTemplate < Template
@@ -46,19 +47,12 @@ module Xcode
 	    super.merge({'Ancestors' => ancestors,
 			 'Options' => options,
 			 'Project' => {'SharedSettings' => settings, 'Configurations' => configurations},
-			 'Targets'  => targets})
+			 'Targets'  => targets,
+			 'Definitions' => definitions})
 	end
 
         def add_file(path)
-	    definition = {'Path' => path}
-
-	    dirname, basename = File.split(path)
-	    if dirname && (0 != dirname.length) && ('.' != dirname)
-		components = dirname.split(File::SEPARATOR)
-		definition['Group'] = (components.length > 1) ? components : components.first
-	    end
-	    definitions[path] = definition
-
+	    definitions[path] = Definition.new path
 	    nodes.push path
         end
 
