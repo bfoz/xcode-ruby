@@ -14,8 +14,14 @@ module Xcode
 
 	def initialize(name=nil)
 	    @name = name
-	    @configurations = Hash.new({})
+	    @configurations = Hash.new {|h,k| h[k] = {} }
 	    @settings = {}
+	end
+
+	# Set a shared setting
+	# @param args [Hash]
+	def set(*args)
+	    @settings.merge! *args
 	end
 
 	def to_hash

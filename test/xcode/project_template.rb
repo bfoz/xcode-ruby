@@ -104,4 +104,46 @@ describe Xcode::ProjectTemplate do
 	    hash['Kind'].must_equal Xcode::Template::XCODE3_PROJECT_TEMPLATE_UNIT_KIND
 	end
     end
+
+    describe 'when DSL' do
+	it 'must create a new project template' do
+	    template = Xcode::ProjectTemplate.new {}
+	    template.must_be_kind_of Xcode::ProjectTemplate
+	end
+
+	it 'must create a new project template with a name' do
+	    template = Xcode::Template.project('Test') {}
+	    template.must_be_kind_of Xcode::ProjectTemplate
+	    template.name.must_equal 'Test'
+	end
+
+	it 'must support setting of the name attribute' do
+	    template = Xcode::Template.project do
+		name 'Test'
+	    end
+	    template.name.must_equal 'Test'
+	end
+
+	it 'must support setting of the identifier attribute' do
+	    Xcode::Template.project { identifier 'test.identifier' }.identifier.must_equal 'test.identifier'
+	end
+
+	it 'must add a project-level setting using the value of a block' do
+	    Xcode::Template.project { let('SETTING') { 'yes' } }.settings['SETTING'].must_equal 'yes'
+	end
+
+	it 'must add a project-level setting using a hash' do
+	    Xcode::Template.project { set('SETTING' => 'yes') }.settings['SETTING'].must_equal 'yes'
+	end
+
+	it 'must add a named configuration with a Hash' do
+	    Xcode::Template.project { configuration('Debug', 'SETTING' => 'yes') }.configurations['Debug']['SETTING'].must_equal 'yes'
+	end
+
+	it 'must add a named configuration with a block' do
+	    Xcode::Template.project do
+		configuration('Debug') { set 'SETTING' => 'yes' }
+	    end.configurations['Debug']['SETTING'].must_equal 'yes'
+	end
+    end
 end

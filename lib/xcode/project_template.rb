@@ -1,4 +1,5 @@
 require_relative 'template'
+require_relative 'template/builder'
 require_relative 'template/definition'
 
 module Xcode
@@ -31,10 +32,18 @@ module Xcode
 	#   @return [Array] Build targets
         attr_reader :targets
 
-        def initialize(**options)
+	def self.new(*args, **options, &block)
+	    if block_given?
+		Xcode::Template::ProjectBuilder.build(*args, **options, &block)
+	    else
+		self.allocate.tap {|template| template.send :initialize, *args, **options }
+	    end
+	end
+
+        def initialize(*args, **options)
             super
             @ancestors = []
-	    @configurations = Hash.new({})
+	    @configurations = Hash.new {|h,k| h[k] = {} }
             @definitions = {}
             @kind = Template::XCODE3_PROJECT_TEMPLATE_UNIT_KIND
 	    @nodes = []
@@ -56,8 +65,31 @@ module Xcode
 	    nodes.push path
         end
 
-	def add_option(**options)
-	    @options.push Option.new(**options)
+	def add_option(*args)
+	    if args.first.is_a? Option
+		@options.push args.first
+	    else
+		@options.push Option.new(*args)
+	    end
+	end
+
+	# Add a {Target} to the targets array
+	# @param target [Target]
+	def add_target(target)
+	    @targets.push target
+	end
+
+	# Set a project-level setting
+	# @param args [Hash]
+	def set(*args)
+	    @settings.merge! *args
+	end
+    end
+
+    class Template
+	def self.project(name=nil, *args, **options, &block)
+	    options[:name] = name if name
+	    Xcode::Template::ProjectBuilder.build(*args, **options, &block)
 	end
     end
 end
