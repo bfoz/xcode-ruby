@@ -31,8 +31,12 @@ module Xcode
 
 	    # Add a template file
 	    # @param path [String]
-	    def file(path)
-		@template.add_file path
+	    def file(path, &block)
+		if block_given?
+		    @template.add_file_definition FileBuilder.new.build(@template, path, &block)
+		else
+		    @template.add_file path
+		end
 	    end
 
 	    # Set the {Template}'s identifier
@@ -84,6 +88,44 @@ module Xcode
 
 	    def set(*args)
 		@configuration.merge! *args
+	    end
+	end
+
+	class FileBuilder
+	    def build(template, path, &block)
+		@template = template
+		@definition = Definition.new path
+		instance_eval(&block)
+		@definition
+	    end
+
+	    # Specify the {Target}s that the file belongs to
+	    # @param target [Symbol,Target,String]	Either the symbol :all to indicate all targets, the name of a {Target} in the targets array, or a {Target} object (must already have been added to the template)
+	    def targets(target)
+		case target
+		    when Symbol
+			@definition.target_indices = []
+		    when Target
+			index = @template.targets.index(target)
+			if index
+			    @definition.target_indices ||= []
+			    @definition.target_indices.push index
+			end
+		    when String
+			index = @template.targets.index {|t| t.name == target }
+			if index
+			    @definition.target_indices ||= []
+			    @definition.target_indices.push index
+			end
+		end
+	    end
+
+	    def method_missing(method, *args, &block)
+		if @definition.respond_to?((method.to_s + '=').to_sym)
+		    @definition.send (method.to_s + '=').to_sym, *args
+		else
+		    super
+		end
 	    end
 	end
 

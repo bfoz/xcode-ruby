@@ -118,6 +118,8 @@ module Xcode
 			    end
 			end
 		    end
+		when Integer
+		    REXML::Element.new('integer').tap {|element| element.text = value.to_s }
 		when String
 		    REXML::Element.new('string').tap {|element| element.text = value }
 		else

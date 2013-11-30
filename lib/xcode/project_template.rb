@@ -60,9 +60,16 @@ module Xcode
 			 'Definitions' => definitions})
 	end
 
-        def add_file(path)
-	    definitions[path] = Definition.new path
+	# Add a new file definition.
+	# @param definition [Definition] the definition to add
+	def add_file_definition(definition)
+	    path = definition.path
+	    definitions[path] = definition
 	    nodes.push path
+	end
+
+        def add_file(path)
+	    add_file_definition Definition.new path
         end
 
 	def add_option(*args)
