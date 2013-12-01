@@ -8,7 +8,7 @@ Manipulate and generate Xcode templates. This gem primarily supports Xcode 5, bu
 
 Add this line to your application's Gemfile:
 
-    gem 'xcode'
+    gem 'xcode', github: 'bfoz/xcode-ruby'
 
 And then execute:
 
