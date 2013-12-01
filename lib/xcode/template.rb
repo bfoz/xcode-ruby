@@ -1,4 +1,5 @@
 require 'fileutils'
+require 'pathname'
 require 'rexml/document'
 
 require_relative 'template/option'
@@ -73,11 +74,20 @@ module Xcode
 	    }
 	end
 
+	# Install the template into the user's template directory
+	def install(path=nil)
+	    template_path = Pathname.new '~/Library/Developer/Xcode/Templates'
+	    base_path = template_path.join(self.kind_of?(ProjectTemplate) ? 'Project Templates' : 'File Templates')
+	    if path
+		base_path = base_path.join(path)
+	    end
+	    write(base_path.expand_path.to_s)
+	end
+
 	# Write the template structure into the given directory path
 	# @param path [String] The path to the directory to write the {Template} to
 	def write(path)
 	    root_path = File.join(path, name + '.xctemplate')
-	    p root_path
 	    FileUtils.mkdir_p(root_path, mode:0700)
 
 	    # Write TemplateInfo.plist
