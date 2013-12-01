@@ -1,5 +1,7 @@
 # Xcode
 
+[![Build Status](https://travis-ci.org/bfoz/xcode-ruby.png)](https://travis-ci.org/bfoz/xcode-ruby)
+
 Manipulate and generate Xcode templates. This gem primarily supports Xcode 5, but it will probably work with Xcode 4 as well. Although, that hasn't been tested.
 
 ## Installation
