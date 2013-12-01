@@ -121,11 +121,10 @@ end
 though dated, is very thorough and was extremely helpful in fleshing out many
 of the details. Well worth the cost.
 
-This post got me started thinking about this project again, and nudged me to
-finally create a gem. It also reminded me that I had purchased Itterheim's
-documentation and then never did anything with it. The first set of test cases
-were written from the examples in this article.
-    http://blog.boreal-kiss.net/2011/03/11/a-minimal-project-template-for-xcode-4/
+[This post](http://blog.boreal-kiss.net/2011/03/11/a-minimal-project-template-for-xcode-4/)
+got me thinking about this project again, and nudged me to finally create a
+gem. It also reminded me that I had purchased Itterheim's documentation and
+then never did anything with it. The first set of test cases were written from
+the examples in this article.
 
-Another useful source:
-    http://meandmark.com/blog/2011/12/creating-custom-xcode-4-project-templates/
+[Another useful source](http://meandmark.com/blog/2011/12/creating-custom-xcode-4-project-templates/)
