@@ -78,6 +78,11 @@ module Xcode
 	def install(path=nil)
 	    template_path = Pathname.new '~/Library/Developer/Xcode/Templates'
 	    base_path = template_path.join(self.kind_of?(ProjectTemplate) ? 'Project Templates' : 'File Templates')
+	    if self.kind_of?(ProjectTemplate)
+		if self.macOSX && !self.iOS
+		    base_path = base_path.join('Mac')
+		end
+	    end
 	    if path
 		base_path = base_path.join(path)
 	    end
