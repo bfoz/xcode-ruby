@@ -115,6 +115,55 @@ Xcode::Template.project do
 '
 end
 ```
+
+## Template Locations
+
+Xcode looks for templates in a number of locations. Starting with Xcode 4, the
+system default templates are stored in the Xcode.app bundle. Custom templates
+are stored in the user's Library directory.
+
+There doesn't appear to be any way to install custom templates for all users
+without modifying the app bundle. Modifying the app bundle breaks the bundle
+signature, which prevents Xcode from launching.
+
+All of the various Template directories share the same internal structure. Project
+templates are stored in a 'Project Templates' subdirectory, while file templates
+are in a 'File Templates' subdirectory.
+
+### Custom templates
+Custom templates can be found in the user's Library directory:
+    ~/Library/Developer/Xcode/Templates/File Templates
+    ~/Library/Developer/Xcode/Templates/Project Templates
+
+Special project template directories:
+    ~/Library/Developer/Xcode/Templates/Project Templates/Base
+    ~/Library/Developer/Xcode/Templates/Project Templates/Mac
+
+Subdirectories of the 'Project Templates' directory correspond to the project
+categories that appear in the sidebar of the New Project dialog.
+
+It appears that there are two special category directories called 'Base' and
+'Mac', neither of which appears in the sidebar. However, the subdirectories of
+each do appear in the normal fashion. The 'Mac' directory contains templates
+that are only relevant to Mac OS X targets, whereas 'Base' contains abstract
+templates that can be used as ancestors for other templates.
+
+Regardless of where the templates are installed within 'Project Templates',
+they seem to show up as both iOS and OS X templates in the New Project dialog.
+
+### System templates
+The Xcode app bundle has a Templates directory that mirrors the layout of the
+user templates directory, but contains the default templates. The default iOS
+templates are stored in the 'Platforms' directory. It's not clear if OS X
+templates can also be stored in 'Platforms'. Nor is it clear if there can be
+a corresponding platforms directory in ~/Library.
+
+Mac OS X templates:
+    /Applications/Xcode.app/Contents/Developer/Library/Xcode/Templates
+
+iOS templates:
+    /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/Library/Xcode/Templates
+
 ## References
 
 [Steffen Itterheim](http://github.com/LearnCocos2D)'s ['Xcode 4 Template Documentation'](http://www.learn-cocos2d.com/store/xcode4-template-documentation/),
