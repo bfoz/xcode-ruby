@@ -50,18 +50,6 @@ module Xcode
 		end
 	    end
 
-	    # Set the {Template}'s identifier
-	    # @param identifier [String]
-	    def identifier(id)
-		@template.identifier = id
-	    end
-
-	    # Set the {Template}'s name
-	    # @param name [String]
-	    def name(name)
-		@template.name = name
-	    end
-
 	    # Create a new {Option}
 	    # @param type [Symbol]  The type of the new {Option}
 	    def option(type, &block)
@@ -88,6 +76,14 @@ module Xcode
 		@template.set *args
 	    end
 	    # @endgroup
+
+	    def method_missing(method, *args, &block)
+		if @template.respond_to?((method.to_s + '=').to_sym)
+		    @template.send (method.to_s + '=').to_sym, *args
+		else
+		    super
+		end
+	    end
 	end
 
 	class ConfigurationBuilder
