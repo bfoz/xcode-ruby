@@ -50,6 +50,16 @@ module Xcode
 		end
 	    end
 
+	    # Set the platform type to iOS
+	    def iOS
+		@template.iOS = true
+	    end
+
+	    # Set the platform type to Mac OS X
+	    def macOSX
+		@template.macOSX = true
+	    end
+
 	    # Create a new {Option}
 	    # @param type [Symbol]  The type of the new {Option}
 	    def option(type, &block)
