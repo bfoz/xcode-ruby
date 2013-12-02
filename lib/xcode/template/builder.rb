@@ -11,6 +11,17 @@ module Xcode
 		@template
 	    end
 
+	    # @param ancestor_identifier [String]	the ancestor to add to the {Template}
+	    def ancestor(ancestor_identifier)
+		@template.ancestors.push ancestor_identifier
+	    end
+
+	    # Set the {Template} to be concrete or abstract
+	    # @param concrete [Boolean] defaults to true
+	    def concrete(concrete=true)
+		@template.concrete = concrete
+	    end
+
 	    # Create a new named configuration and evaluate the given block
 	    # @param name [String]  the name of the new configuration
 	    # @return [Hash]
