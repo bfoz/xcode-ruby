@@ -103,6 +103,16 @@ describe Xcode::ProjectTemplate do
 	it 'must have a kind' do
 	    hash['Kind'].must_equal Xcode::Template::XCODE3_PROJECT_TEMPLATE_UNIT_KIND
 	end
+
+	it 'must not have Shared Project Settings' do
+	    hash['Project']['SharedSettings'].must_be_nil
+	end
+
+	it 'must generate an empty configuration if none have been set' do
+	    subject.configurations.has_key?('Release').must_equal false
+	    hash['Project'].has_key?('Configurations').must_equal true
+	    hash['Project']['Configurations'].has_key?('Release').must_equal true
+	end
     end
 
     describe 'when DSL' do

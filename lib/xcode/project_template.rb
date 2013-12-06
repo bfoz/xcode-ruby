@@ -52,10 +52,12 @@ module Xcode
 	    @targets = []
         end
 
+	# Xcoce 5.0.2 will crash if a Project Template doesn't include a 'Project' section with at least one configuration.
 	def to_hash
 	    super.merge({'Ancestors' => ancestors,
 			 'Options' => options,
-			 'Project' => {'SharedSettings' => settings, 'Configurations' => configurations},
+			 'Project' => { 'SharedSettings' => settings.empty? ? nil : settings,
+					'Configurations' => configurations.empty? ? {'Release' => {}} : configurations},
 			 'Targets'  => targets,
 			 'Definitions' => definitions})
 	end
