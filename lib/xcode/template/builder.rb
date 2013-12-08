@@ -1,4 +1,5 @@
 require_relative 'option_builder'
+require_relative 'builder/target'
 
 module Xcode
     class Template
@@ -73,7 +74,7 @@ module Xcode
 	    # @param name [String]  the name of the new {Target}
 	    # @return [Target]
 	    def target(name, &block)
-		@template.add_target TargetBuilder.new.build(name, &block)
+		@template.add_target Builder::Target.new.build(name, &block)
 	    end
 
 	    # @group Options
@@ -163,36 +164,6 @@ module Xcode
 		else
 		    super
 		end
-	    end
-	end
-
-	class TargetBuilder
-	    def build(name, &block)
-		@target = Target.new(name)
-		instance_eval &block
-		@target
-	    end
-
-	    # Create a new named configuration and evaluate the given block
-	    # @param name [String]  the name of the new configuration
-	    def configuration(name, *args, &block)
-		if block_given?
-		    @target.configurations[name] = ConfigurationBuilder.new.build(&block)
-		elsif args && (0 != args.size)
-		    @target.configurations[name].merge! *args
-		end
-		@target.configurations[name]
-	    end
-
-	    # Set a project setting from the value of a block
-	    # @param name [String]  the name of the setting
-	    def let(name, &block)
-		@target.settings[name] = block.call
-	    end
-
-	    # Set a project-level setting from a {Hash}
-	    def set(*args)
-		@target.set *args
 	    end
 	end
     end
