@@ -46,7 +46,7 @@ module Xcode
 		end
 	    end
 
-	    def to_hash
+	    def to_h
 		if text
 		    text
 		else

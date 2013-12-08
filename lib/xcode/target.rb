@@ -28,7 +28,7 @@ module Xcode
 	    @settings.merge! *args
 	end
 
-	def to_hash
+	def to_h
 	    {'Name' => name,
 	     'TargetType' => (:aggregate == target_type) ? 'Aggregate' : ((:legacy == target_type) ? 'Legacy' : nil),
 	     'SharedSettings' => settings.empty? ? nil : settings,

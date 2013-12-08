@@ -53,7 +53,7 @@ module Xcode
         end
 
 	# Xcoce 5.0.2 will crash if a Project Template doesn't include a 'Project' section with at least one configuration.
-	def to_hash
+	def to_h
 	    super.merge({'Ancestors' => ancestors,
 			 'Options' => options,
 			 'Project' => { 'SharedSettings' => settings.empty? ? nil : settings,

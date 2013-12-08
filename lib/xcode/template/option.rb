@@ -79,8 +79,8 @@ module Xcode
 		"___VARIABLE_#{identifier}:identifier___"
 	    end
 
-	    def to_hash
-		items = values.reduce({}) {|items, value| items[value.name] = value unless value.to_hash.empty?; items}
+	    def to_h
+		items = values.reduce({}) {|items, value| items[value.name] = value unless value.to_h.empty?; items}
 		values_array = values.map {|v| v.name }
 		{'Identifier' => identifier,
 		 'Name' => name,

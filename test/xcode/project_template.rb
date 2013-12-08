@@ -98,7 +98,7 @@ describe Xcode::ProjectTemplate do
     end
 
     describe 'when generating a hash' do
-	let(:hash) { subject.to_hash }
+	let(:hash) { subject.to_h }
 
 	it 'must have a kind' do
 	    hash['Kind'].must_equal Xcode::Template::XCODE3_PROJECT_TEMPLATE_UNIT_KIND

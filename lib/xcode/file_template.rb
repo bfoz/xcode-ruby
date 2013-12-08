@@ -12,7 +12,7 @@ module Xcode
 	    @kind = Template::IDEKIT_TEXT_SUBSTITUTION_FILE_TEMPLATE_KIND
 	end
 
-	def to_hash
+	def to_h
 	    super.merge({'AllowedTypes' => allowed_types})
 	end
     end

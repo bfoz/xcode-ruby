@@ -128,7 +128,7 @@ describe Xcode::Template do
     end
 
     describe 'when generating a hash' do
-	let(:hash) { subject.to_hash }
+	let(:hash) { subject.to_h }
 
 	it 'must have an identifier' do
 	    hash['Identifier'].must_equal 'net.bfoz.test_template'
@@ -137,16 +137,16 @@ describe Xcode::Template do
 	describe 'concrete' do
 	    it 'must be true' do
 		subject.concrete = true
-		subject.to_hash['Concrete'].must_equal true
+		subject.to_h['Concrete'].must_equal true
 	    end
 
 	    it 'must be false' do
 		subject.concrete = false
-		subject.to_hash['Concrete'].must_equal false
+		subject.to_h['Concrete'].must_equal false
 	    end
 
 	    it 'must be neither true nor false' do
-		subject.to_hash['Concrete'].must_be_nil
+		subject.to_h['Concrete'].must_be_nil
 	    end
 	end
     end

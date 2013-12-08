@@ -10,7 +10,7 @@ describe Xcode::Target do
     end
 
     describe 'when generating a hash' do
-	let(:hash) { subject.to_hash }
+	let(:hash) { subject.to_h }
 
 	it 'must not have a type' do
 	    hash['TargetType'].must_be_nil
@@ -18,17 +18,17 @@ describe Xcode::Target do
 
 	it 'must have a Name' do
 	    subject.name = 'test name'
-	    subject.to_hash['Name'].must_equal 'test name'
+	    subject.to_h['Name'].must_equal 'test name'
 	end
 
 	it 'must support Aggregate type' do
 	    subject.target_type = :aggregate
-	    subject.to_hash['TargetType'].must_equal 'Aggregate'
+	    subject.to_h['TargetType'].must_equal 'Aggregate'
 	end
 
 	it 'must support Legacy type' do
 	    subject.target_type = :legacy
-	    subject.to_hash['TargetType'].must_equal 'Legacy'
+	    subject.to_h['TargetType'].must_equal 'Legacy'
 	end
     end
 end

@@ -10,7 +10,7 @@ module Xcode
 		    @name = name
 		end
 
-		def to_hash
+		def to_h
 		    {}
 		end
 	    end

@@ -63,7 +63,7 @@ module Xcode
 	    self.macOSX = args.include?('com.app.platform.macosx')
 	end
 
-	def to_hash
+	def to_h
 	    {'Description' => description,
 	     'Kind' => kind,
 	     'Identifier' => identifier,
@@ -99,7 +99,7 @@ module Xcode
 		f.puts '<?xml version="1.0" encoding="UTF-8"?>'
 		f.puts '<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">'
 		f.puts "<plist version='1.0'>"
-		f.puts string_for_value(to_hash, 1)
+		f.puts string_for_value(to_h, 1)
 		f.puts '</plist>'
 	    end
 	end
@@ -133,7 +133,7 @@ module Xcode
 		when String
 		    indentation + '<string>' + value.encode(:xml => :text) + "</string>\n"
 		else
-		    string_for_value(value.to_hash, indent) if value.respond_to? :to_hash
+		    string_for_value(value.to_h, indent) if value.respond_to? :to_h
 	    end
 	end
     end
