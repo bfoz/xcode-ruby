@@ -1,3 +1,5 @@
+require_relative 'option/value'
+
 module Xcode
     class Template
 	class Option
@@ -20,6 +22,10 @@ module Xcode
 	    # @!attribute name
 	    #	@return [String]    The text of the label associated with the input component
 	    attr_accessor :name
+
+	    # @!attribute order
+	    #   @return [Integer]  {Option}s are displayed in the New Template dialog ordered according to this property. It provides rudimentary layout control.
+	    attr_accessor :order
 
 	    # @!attribute persisted
 	    #	@return [Boolean]   Indicates that the value will be persisted by Xcode and used the next time the template is instantiated
@@ -49,7 +55,17 @@ module Xcode
 	    #	@return [Array]	    Used to enable or disable other {Option}s based on the value selected in a multi-value control (popups, etc)
 	    attr_accessor :required_options
 
+	    def self.new(**options)
+		case options[:type]
+		    when :popup
+			PopupOption
+		    else
+			self
+		end.allocate.tap {|object| object.send :initialize, **options }
+	    end
+
 	    def initialize(**options)
+		@values = []
 		options.each {|k,v| send(k.to_s+'=', v)}
 	    end
 
@@ -64,6 +80,8 @@ module Xcode
 	    end
 
 	    def to_hash
+		items = values.reduce({}) {|items, value| items[value.name] = value unless value.to_hash.empty?; items}
+		values_array = values.map {|v| v.name }
 		{'Identifier' => identifier,
 		 'Name' => name,
 		 'Default' => default,
@@ -73,10 +91,23 @@ module Xcode
 		 'Type' => type.to_s,
 		 'NotPersisted' => (persisted.nil? ? nil : !persisted),
 		 'FallbackHeader' => fallback_header,
+		 'SortOrder' => order,
 		 'Suffixes' => suffixes,
-		 'Values' => values,
+		 'Units' => items.empty? ? nil : items,
+		 'Values' => values_array.empty? ? nil : values_array,
 		 'RequiredOptions' => required_options,
 		}
+	    end
+	end
+
+	class PopupOption < Option
+	    def initialize(**options)
+		super **options
+		@type = :popup
+	    end
+
+	    def push(item)
+		@values.push item
 	    end
 	end
 

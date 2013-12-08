@@ -59,6 +59,7 @@ module Xcode
 			 'Project' => { 'SharedSettings' => settings.empty? ? nil : settings,
 					'Configurations' => configurations.empty? ? {'Release' => {}} : configurations},
 			 'Targets'  => targets,
+			 'Nodes' => nodes,
 			 'Definitions' => definitions})
 	end
 

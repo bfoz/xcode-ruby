@@ -155,5 +155,19 @@ describe Xcode::ProjectTemplate do
 		configuration('Debug') { set 'SETTING' => 'yes' }
 	    end.configurations['Debug']['SETTING'].must_equal 'yes'
 	end
+
+	it 'must add a generic option with a type' do
+	    Xcode::Template.project do
+		option :text
+	    end.options.count.must_equal 1
+	end
+
+	it 'must add a popup option' do
+	    template = Xcode::Template.project do
+		popup 'popup_option'
+	    end
+	    template.options.first.type.must_equal :popup
+	    template.options.first.name.must_equal 'popup_option'
+	end
     end
 end

@@ -1,3 +1,5 @@
+require_relative 'option_builder'
+
 module Xcode
     class Template
 	class ProjectBuilder
@@ -41,7 +43,7 @@ module Xcode
 	    end
 
 	    # Add a template file
-	    # @param path [String]
+	    # @param path	[String] the file's path
 	    def file(path, &block)
 		if block_given?
 		    @template.add_file_definition FileBuilder.new.build(@template, path, &block)
@@ -62,8 +64,9 @@ module Xcode
 
 	    # Create a new {Option}
 	    # @param type [Symbol]  The type of the new {Option}
-	    def option(type, &block)
-		@template.add_option OptionBuilder.new.build(type, &block)
+	    # @param name [String]  The name of the {Option}
+	    def option(type, name=nil, &block)
+		@template.add_option OptionBuilder.new.build(type, name, &block)
 	    end
 
 	    # Create a new named {Target}
@@ -72,6 +75,23 @@ module Xcode
 	    def target(name, &block)
 		@template.add_target TargetBuilder.new.build(name, &block)
 	    end
+
+	    # @group Options
+
+	    # Create a new Popup {Option}
+	    # @param name   [String]	the display name of the {Option}
+	    def popup(name=nil, &block)
+		option(:popup, name, &block)
+	    end
+
+	    def static(&block)
+		option(:static, &block)
+	    end
+
+	    def text(&block)
+		option(:text, &block)
+	    end
+	    # @endgroup
 
 	    # @group Project Settings
 
@@ -140,30 +160,6 @@ module Xcode
 	    def method_missing(method, *args, &block)
 		if @definition.respond_to?((method.to_s + '=').to_sym)
 		    @definition.send (method.to_s + '=').to_sym, *args
-		else
-		    super
-		end
-	    end
-	end
-
-	class OptionBuilder
-	    def build(type, &block)
-		@option = Option.new(type: type)
-		instance_eval(&block)
-		@option
-	    end
-
-	    def persisted(persisted=true)
-		@option.persisted = persisted
-	    end
-
-	    def required(required=true)
-		@option.required = required
-	    end
-
-	    def method_missing(method, *args, &block)
-		if @option.respond_to?((method.to_s + '=').to_sym)
-		    @option.send (method.to_s + '=').to_sym, *args
 		else
 		    super
 		end
