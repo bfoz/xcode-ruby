@@ -1,6 +1,5 @@
 require 'fileutils'
 require 'pathname'
-require 'rexml/document'
 
 require_relative 'template/option'
 
@@ -97,46 +96,44 @@ module Xcode
 
 	    # Write TemplateInfo.plist
 	    File.open(File.join(root_path, 'TemplateInfo.plist'), 'w') do |f|
-		document = REXML::Document.new('<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">')
-		plist = document.add_element('plist', {'version' => '1.0'})
-		plist.add_element element_for_value(to_hash)
-
-		# This is a hack to force REXML to output PCDATA text inline with the enclosing element
-		formatter = REXML::Formatters::Pretty.new(4)
-		formatter.compact = true
-		formatter.write(document, f)
+		f.puts '<?xml version="1.0" encoding="UTF-8"?>'
+		f.puts '<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">'
+		f.puts "<plist version='1.0'>"
+		f.puts string_for_value(to_hash, 1)
+		f.puts '</plist>'
 	    end
 	end
 
 	private
 
-	# @return [REXML::Element]
-	def element_for_value(value)
+	# @return [String]
+	def string_for_value(value, indent=0)
+	    indentation = ' ' * (4 * indent)
 	    case value
 		when TrueClass, FalseClass
-		    REXML::Element.new( value ? 'true' : 'false')
+		    indentation + (value ? '<true/>' : '<false/>') + "\n"
 		when Array
 		    if value.length != 0
-			REXML::Element.new('array').tap do |element|
-			    value.compact.each {|v| element.add_element(element_for_value(v)) }
-			end
+			values = value.map {|v| string_for_value(v, indent+1) }.compact
+			[indentation + '<array>' + "\n", *values, indentation + '</array>' + "\n"].join
 		    end
 		when Hash
-		    REXML::Element.new('dict').tap do |element|
-			value.each do |key, v|
-			    next unless v
-			    e = element_for_value(v)
-			    next unless e
-			    element.add_element('key').text = key
-			    element.add_element(e)
-			end
+		    output = indentation + '<dict>' + "\n"
+		    key_indentation = indentation + (' ' * 4)
+		    value.each do |key, v|
+			next unless v
+			s = string_for_value(v, indent + 1)
+			next unless s
+			output += key_indentation + "<key>#{key}</key>\n"
+			output += s
 		    end
+		    output += indentation + '</dict>' + "\n"
 		when Integer
-		    REXML::Element.new('integer').tap {|element| element.text = value.to_s }
+		    indentation + "<integer>#{value.to_s}</integer>\n"
 		when String
-		    REXML::Element.new('string').tap {|element| element.text = value }
+		    indentation + '<string>' + value.encode(:xml => :text) + "</string>\n"
 		else
-		    element_for_value(value.to_hash) if value.respond_to? :to_hash
+		    string_for_value(value.to_hash, indent) if value.respond_to? :to_hash
 	    end
 	end
     end
