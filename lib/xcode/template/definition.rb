@@ -33,7 +33,8 @@ module Xcode
 	    #   @return [String]    The string to use when the definition is a simple macro expansion
 	    attr_accessor :text
 
-	    def initialize(path=nil)
+	    def initialize(path=nil, text=nil)
+		@text = text
 		if path
 		    self.path = path
 

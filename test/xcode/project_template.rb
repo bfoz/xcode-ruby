@@ -169,5 +169,12 @@ describe Xcode::ProjectTemplate do
 	    template.options.first.type.must_equal :popup
 	    template.options.first.name.must_equal 'popup_option'
 	end
+
+	it 'must add a file with text' do
+	    template = Xcode::Template.project do
+		file 'test_file', 'test text'
+	    end
+	    template.definitions['test_file'].text.must_equal 'test text'
+	end
     end
 end

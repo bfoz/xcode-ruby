@@ -71,8 +71,8 @@ module Xcode
 	    nodes.push path
 	end
 
-        def add_file(path)
-	    add_file_definition Definition.new path
+        def add_file(path, text=nil)
+	    add_file_definition Definition.new path, text
         end
 
 	def add_option(*args)

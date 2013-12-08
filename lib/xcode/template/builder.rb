@@ -45,11 +45,12 @@ module Xcode
 
 	    # Add a template file
 	    # @param path	[String] the file's path
-	    def file(path, &block)
+	    # @param text	[String] the file's contents
+	    def file(path, text=nil, &block)
 		if block_given?
-		    @template.add_file_definition FileBuilder.new.build(@template, path, &block)
+		    @template.add_file_definition FileBuilder.new.build(@template, path, text, &block)
 		else
-		    @template.add_file path
+		    @template.add_file path, text
 		end
 	    end
 
@@ -130,9 +131,9 @@ module Xcode
 	end
 
 	class FileBuilder
-	    def build(template, path, &block)
+	    def build(template, path, text=nil, &block)
 		@template = template
-		@definition = Definition.new path
+		@definition = Definition.new path, text
 		instance_eval(&block)
 		@definition
 	    end
