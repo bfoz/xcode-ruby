@@ -37,6 +37,14 @@ module Xcode
 		def set(*args)
 		    @target.set *args
 		end
+
+		def method_missing(method, *args, &block)
+		    if @target.respond_to?((method.to_s + '=').to_sym)
+			@target.send (method.to_s + '=').to_sym, *args
+		    else
+			super
+		    end
+		end
 	    end
 	end
     end
