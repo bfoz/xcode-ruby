@@ -34,6 +34,12 @@ module Xcode
 		instance_eval &block if block_given?
 		@item
 	    end
+
+	    # Set variables that are shared by all of the project's configurations
+	    # @param args [Hash]
+	    def set(*args)
+		@item.set *args
+	    end
 	end
     end
 end
