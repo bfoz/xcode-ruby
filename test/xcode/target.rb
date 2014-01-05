@@ -30,5 +30,13 @@ describe Xcode::Target do
 	    subject.target_type = :legacy
 	    subject.to_h['TargetType'].must_equal 'Legacy'
 	end
+
+	it 'must support Build Phases' do
+	    subject.push Xcode::Template::BuildPhase.script('/bin/sh', 'echo Bonjour!')
+	    build_phase = subject.to_h['BuildPhases'].first
+	    build_phase['Class'].must_equal 'ShellScript'
+	    build_phase['ShellPath'].must_equal '/bin/sh'
+	    build_phase['ShellScript'].must_equal 'echo Bonjour!'
+	end
     end
 end

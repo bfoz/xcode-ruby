@@ -1,3 +1,5 @@
+require_relative '../build_phase'
+
 module Xcode
     class Template
 	module Builder
@@ -37,6 +39,15 @@ module Xcode
 		def set(*args)
 		    @target.set *args
 		end
+
+# @group Build Phases
+		# Create a ShellScript build phase
+		# @param shell [String]	The shell to use to execute the script
+		# @param content [String]   The script contents
+		def script(shell, content)
+		    @target.push BuildPhase.script(shell, content)
+		end
+# @endgroup
 
 		def method_missing(method, *args, &block)
 		    if @target.respond_to?((method.to_s + '=').to_sym)

@@ -4,6 +4,10 @@ module Xcode
 	#   @return [String]
 	attr_accessor :name
 
+	# @!attribute [r] build_phases
+	#   @return [Array] Build Phases
+	attr_reader :build_phases
+
 	# @!attribute [r] configurations
 	#   @return [Hash]  Build configurations
 	attr_reader :configurations
@@ -26,6 +30,7 @@ module Xcode
 
 	def initialize(name=nil)
 	    @name = name
+	    @build_phases = []
 	    @configurations = Hash.new {|h,k| h[k] = {} }
 	    @settings = {}
 	end
@@ -36,9 +41,17 @@ module Xcode
 	    @settings.merge! *args
 	end
 
+	def push(arg)
+	    case arg
+		when Template::BuildPhase
+		    @build_phases.push arg
+	    end
+	end
+
 	def to_h
 	    {'Name' => name,
 	     'TargetType' => (:aggregate == target_type) ? 'Aggregate' : ((:legacy == target_type) ? 'Legacy' : nil),
+	     'BuildPhases' => build_phases.empty? ? nil : build_phases.map {|a| a.to_h},
 	     'BuildToolPath' => tool_path,
 	     'BuildToolArgsString' => tool_arguments,
 	     'SharedSettings' => settings.empty? ? nil : settings,

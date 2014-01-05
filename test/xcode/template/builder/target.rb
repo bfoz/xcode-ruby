@@ -19,4 +19,13 @@ describe Xcode::Template::Builder::Target do
     it 'must have a legacy command' do
 	subject.build { legacy }.target_type.must_equal :legacy
     end
+
+    it 'must have a script command' do
+	target = subject.build { script('/bin/sh', 'echo Hello World') }
+	target.wont_be_nil
+	build_phase = target.build_phases.first
+	build_phase.type.must_equal :script
+	build_phase.shell.must_equal '/bin/sh'
+	build_phase.content.must_equal 'echo Hello World'
+    end
 end
