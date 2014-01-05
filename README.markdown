@@ -118,7 +118,7 @@ end
 
 ## Template Locations
 
-Xcode looks for templates in a number of locations. Starting with Xcode 4, the
+Xcode looks for templates in a number of locations. Starting with Xcode 4.3, the
 system default templates are stored in the Xcode.app bundle. Custom templates
 are stored in the user's Library directory.
 
@@ -176,4 +176,9 @@ gem. It also reminded me that I had purchased Itterheim's documentation and
 then never did anything with it. The first set of test cases were written from
 the examples in this article.
 
-[Another useful source](http://meandmark.com/blog/2011/12/creating-custom-xcode-4-project-templates/)
+Other userful references, in no particular order:
+- http://meandmark.com/blog/2011/12/creating-custom-xcode-4-project-templates/
+- http://meandmark.com/blog/2011/11/creating-custom-xcode-4-file-templates/
+- http://rypearts.com/proof/bob/r1/2012/03/04/creating-custom-xcode-4-file-templates/
+- http://sergeynezdoliy.blogspot.com/2013/03/creating-project-template-for-xcode-4x.html
+- https://snipt.net/yonishin/about-xcode-4-project-template/
