@@ -12,6 +12,10 @@ module Xcode
 	#   @return [Hash]  Build configurations
 	attr_reader :configurations
 
+	# @!attribute product_type
+	#   @return [Symbol]  The type of the product built by the target (:application, :bundle, :framework, :kernel_extension, :dynamic_library, :static_library, :tool)
+	attr_accessor :product_type
+
 	# @!attribute [r] settings
 	#   @return [Hash]  Settings shared by all of the Project's configurations
 	attr_reader :settings
@@ -54,9 +58,23 @@ module Xcode
 	     'BuildPhases' => build_phases.empty? ? nil : build_phases.map {|a| a.to_h},
 	     'BuildToolPath' => tool_path,
 	     'BuildToolArgsString' => tool_arguments,
+	     'ProductType'  => product_type_identifier,
 	     'SharedSettings' => settings.empty? ? nil : settings,
 	     'Configurations' => configurations,
 	    }
+	end
+
+private
+	def product_type_identifier
+	    case product_type
+		when :application	then 'com.apple.product-type.application'
+		when :bundle		then 'com.apple.product-type.bundle'
+		when :framework		then 'com.apple.product-type.framework'
+		when :kernel_extension	then 'com.apple.product-type.kernel-extension'
+		when :dynamic_library	then 'com.apple.product-type.library.dynamic'
+		when :static_library	then 'com.apple.product-type.library.static'
+		when :tool		then 'com.apple.product-type.tool'
+	    end
 	end
     end
 end

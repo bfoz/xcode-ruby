@@ -38,5 +38,10 @@ describe Xcode::Target do
 	    build_phase['ShellPath'].must_equal '/bin/sh'
 	    build_phase['ShellScript'].must_equal 'echo Bonjour!'
 	end
+
+	it 'must support Product Type' do
+	    subject.product_type = :application
+	    subject.to_h['ProductType'].must_equal 'com.apple.product-type.application'
+	end
     end
 end

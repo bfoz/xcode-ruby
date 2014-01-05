@@ -28,4 +28,10 @@ describe Xcode::Template::Builder::Target do
 	build_phase.shell.must_equal '/bin/sh'
 	build_phase.content.must_equal 'echo Hello World'
     end
+
+    describe 'Product Types' do
+	it 'must have an application command' do
+	    subject.build { application }.product_type.must_equal :application
+	end
+    end
 end

@@ -40,6 +40,13 @@ module Xcode
 		    @target.set *args
 		end
 
+		# @group Product Types
+		# Set the product type to :application
+		def application
+		    @target.product_type = :application
+		end
+		# @endgroup
+
 # @group Build Phases
 		# Create a ShellScript build phase
 		# @param shell [String]	The shell to use to execute the script
