@@ -25,22 +25,35 @@ describe Xcode::ProjectTemplate do
 	subject.settings.must_be :empty?
     end
 
-    describe "when adding a resource file" do
+    describe 'when adding a file' do
         before do
             subject.add_file 'MyFile.m'
-        end
-
-        it 'must add a definition' do
-            definition = subject.definitions['MyFile.m']
-            definition.wont_be_nil
-            definition.group.must_be_nil
-            definition.path.must_equal 'MyFile.m'
-            definition.target_indices.must_be_nil
         end
 
         it 'must add a node' do
             subject.nodes.first.must_equal 'MyFile.m'
         end
+
+	it 'must hashify' do
+	    hash = subject.to_h
+	    hash['Definitions'].has_key?('MyFile.m').must_equal true
+	    hash['Definitions']['MyFile.m']['Group'].must_be_nil
+	    hash['Definitions']['MyFile.m']['Path'].must_equal 'MyFile.m'
+	end
+    end
+
+    describe 'when adding a file with content' do
+	before do
+	    subject.add_file 'MyFile.m', 'Fancy content'
+	end
+
+	it 'must add a node' do
+	    subject.nodes.first.must_equal 'MyFile.m'
+	end
+
+	it 'must hashify' do
+	    subject.to_h['Definitions']['MyFile.m'].must_equal 'Fancy content'
+	end
     end
 
     describe 'when adding a file with a path' do
@@ -48,17 +61,16 @@ describe Xcode::ProjectTemplate do
             subject.add_file 'MyFiles/MyFile.m'
         end
 
-        it 'must add a definition with a group' do
-            definition = subject.definitions['MyFiles/MyFile.m']
-            definition.wont_be_nil
-            definition.group.must_equal 'MyFiles'
-            definition.path.must_equal 'MyFiles/MyFile.m'
-            definition.target_indices.must_be_nil
-        end
-
         it 'must add a node' do
             subject.nodes.first.must_equal 'MyFiles/MyFile.m'
         end
+
+	it 'must hashify' do
+	    hash = subject.to_h
+	    hash['Definitions'].has_key?('MyFiles/MyFile.m').must_equal true
+	    hash['Definitions']['MyFiles/MyFile.m']['Group'].must_equal 'MyFiles'
+	    hash['Definitions']['MyFiles/MyFile.m']['Path'].must_equal 'MyFiles/MyFile.m'
+	end
     end
 
     describe 'when adding a file to a subgroup' do
@@ -66,35 +78,16 @@ describe Xcode::ProjectTemplate do
             subject.add_file 'Classes/MyClass/MyFile.m'
         end
 
-        it 'must add a definition with a subgroup' do
-            definition = subject.definitions['Classes/MyClass/MyFile.m']
-            definition.wont_be_nil
-            definition.group.must_equal ['Classes', 'MyClass']
-            definition.path.must_equal 'Classes/MyClass/MyFile.m'
-            definition.target_indices.must_be_nil
-        end
-
         it 'must add a node' do
             subject.nodes.first.must_equal 'Classes/MyClass/MyFile.m'
         end
-    end
 
-    describe "when adding a non-resource file" do
-        before do
-            subject.add_file 'MyFile.m'
-        end
-
-        it 'must add a definition' do
-            definition = subject.definitions['MyFile.m']
-            definition.wont_be_nil
-            definition.group.must_be_nil
-            definition.path.must_equal 'MyFile.m'
-            definition.target_indices.must_be_nil
-        end
-
-        it 'must add a node' do
-            subject.nodes.first.must_equal 'MyFile.m'
-        end
+	it 'must hashify' do
+	    hash = subject.to_h
+	    hash['Definitions'].has_key?('Classes/MyClass/MyFile.m').must_equal true
+	    hash['Definitions']['Classes/MyClass/MyFile.m']['Group'].must_equal ['Classes', 'MyClass']
+	    hash['Definitions']['Classes/MyClass/MyFile.m']['Path'].must_equal 'Classes/MyClass/MyFile.m'
+	end
     end
 
     describe 'when generating a hash' do
@@ -174,7 +167,28 @@ describe Xcode::ProjectTemplate do
 	    template = Xcode::Template.project do
 		file 'test_file', 'test text'
 	    end
-	    template.definitions['test_file'].text.must_equal 'test text'
+	    template.files.size.must_equal 1
+	end
+
+	describe 'when adding a file with a placeholder' do
+	    let(:template) do
+		Xcode::Template.project do
+		    file 'test_file' do
+			placeholder 'test_placeholder' do
+			    indent 1
+			end
+		    end
+		end
+	    end
+
+	    it 'must have a file' do
+		template.files.size.must_equal 1
+	    end
+
+	    it 'must hashify to the correct number of nodes' do
+		template.nodes.size.must_equal 1
+		template.nodes.first.must_equal 'test_file:test_placeholder'
+	    end
 	end
     end
 end

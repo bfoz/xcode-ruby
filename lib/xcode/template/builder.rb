@@ -1,4 +1,5 @@
 require_relative 'option_builder'
+require_relative 'builder/file'
 require_relative 'builder/target'
 
 module Xcode
@@ -48,7 +49,7 @@ module Xcode
 	    # @param text	[String] the file's contents
 	    def file(path, text=nil, &block)
 		if block_given?
-		    @template.add_file_definition FileBuilder.new.build(@template, path, text, &block)
+		    @template.add_file_definition Builder::File.new.build(@template, path, text, &block)
 		else
 		    @template.add_file path, text
 		end
@@ -127,44 +128,6 @@ module Xcode
 
 	    def set(*args)
 		@configuration.merge! *args
-	    end
-	end
-
-	class FileBuilder
-	    def build(template, path, text=nil, &block)
-		@template = template
-		@definition = Definition.new path, text
-		instance_eval(&block)
-		@definition
-	    end
-
-	    # Specify the {Target}s that the file belongs to
-	    # @param target [Symbol,Target,String]	Either the symbol :all to indicate all targets, the name of a {Target} in the targets array, or a {Target} object (must already have been added to the template)
-	    def targets(target)
-		case target
-		    when Symbol
-			@definition.target_indices = []
-		    when Target
-			index = @template.targets.index(target)
-			if index
-			    @definition.target_indices ||= []
-			    @definition.target_indices.push index
-			end
-		    when String
-			index = @template.targets.index {|t| t.name == target }
-			if index
-			    @definition.target_indices ||= []
-			    @definition.target_indices.push index
-			end
-		end
-	    end
-
-	    def method_missing(method, *args, &block)
-		if @definition.respond_to?((method.to_s + '=').to_sym)
-		    @definition.send (method.to_s + '=').to_sym, *args
-		else
-		    super
-		end
 	    end
 	end
     end

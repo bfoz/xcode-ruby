@@ -95,12 +95,12 @@ Xcode::Template.project do
 //  The contents of this file are implicitly included at the beginning of every source file.
 //
 '
-    end
 
-    file '___PACKAGENAME___-Prefix.pch:objC' do
-        prefix '#ifdef __OBJC__'
-        suffix '#endif'
-        indent 1
+        placeholder 'objC' do
+            indent 1
+            prefix '#ifdef __OBJC__'
+            suffix '#endif'
+        end
     end
 
     define '*:import:*' => '#import "___*___"'

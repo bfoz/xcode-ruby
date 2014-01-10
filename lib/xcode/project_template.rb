@@ -16,9 +16,9 @@ module Xcode
         #   @return [Hash]  Definitions
         attr_reader :definitions
 
-        # @!attribute [r] nodes
-        #   @return [Array<String>] Nodes represent files that will be created in the generated project
-        attr_reader :nodes
+	# @!attribute [r] files
+	#   @return [Array<FileDefinition>]  Files. What else would it be?
+	attr_accessor :files
 
 	# @!attribute options
 	#   @return [Array] Options are controls that show up in the New Project Assistant
@@ -45,14 +45,24 @@ module Xcode
             @ancestors = []
 	    @configurations = Hash.new {|h,k| h[k] = {} }
             @definitions = {}
+	    @files = []
             @kind = Template::XCODE3_PROJECT_TEMPLATE_UNIT_KIND
-	    @nodes = []
 	    @options = []
 	    @settings = {}
 	    @targets = []
         end
 
-	# Xcoce 5.0.2 will crash if a Project Template doesn't include a 'Project' section with at least one configuration.
+	# @group Accessors
+
+	# @!attribute [r] nodes
+	#   @return [Array<String>] Nodes represent files that will be created in the generated project
+	def nodes
+	    files.map {|f| f.nodes }.flatten
+	end
+
+	# @endgroup
+
+	# Xcode 5.0.2 will crash if a Project Template doesn't include a 'Project' section with at least one configuration.
 	def to_h
 	    super.merge({'Ancestors' => ancestors,
 			 'Options' => options,
@@ -60,19 +70,17 @@ module Xcode
 					'Configurations' => configurations.empty? ? {'Release' => {}} : configurations},
 			 'Targets'  => targets,
 			 'Nodes' => nodes,
-			 'Definitions' => definitions})
+			 'Definitions' => files.reduce(definitions) {|d, f| d.merge(f.definition) } })
 	end
 
 	# Add a new file definition.
-	# @param definition [Definition] the definition to add
+	# @param definition [FileDefinition] the definition to add
 	def add_file_definition(definition)
-	    path = definition.path
-	    definitions[path] = definition
-	    nodes.push path
+	    files.push definition
 	end
 
         def add_file(path, text=nil)
-	    add_file_definition Definition.new path, text
+	    add_file_definition FileDefinition.new path, text
         end
 
 	def add_option(*args)
